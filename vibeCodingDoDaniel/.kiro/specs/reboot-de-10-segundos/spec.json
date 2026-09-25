@@ -1,0 +1,7 @@
+{
+  "name": "reboot-de-10-segundos",
+  "title": "Reboot de 10 Segundos",
+  "description": "Mini-game challenge where the player must hold and release a projector power button at the correct timing to restore the device without causing a reboot loop.",
+  "language": "en",
+  "status": "draft"
+}
