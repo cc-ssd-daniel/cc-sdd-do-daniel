@@ -1,23 +1,18 @@
-import logo from './logo.svg';
 import './App.css';
+import RebootGame from './minigames/reboot/RebootGame';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <main className="app-shell">
+        <header className="app-shell__header">
+          <p className="app-shell__eyebrow">Projetor Simulator</p>
+          <h1>Chamado da TI</h1>
+          <p className="app-shell__subtitle">Sala 12B • Projetor travado • Diagnóstico em andamento</p>
+        </header>
+
+        <RebootGame />
+      </main>
     </div>
   );
 }
