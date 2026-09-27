@@ -1,0 +1,14 @@
+{
+  "feature_name": "roleta",
+  "language": "pt-BR",
+  "phase": "tasks-generated",
+  "created_at": "2026-09-27",
+  "updated_at": "2026-09-27",
+  "approvals": {
+    "requirements": { "generated": true, "approved": true },
+    "design": { "generated": true, "approved": true },
+    "tasks": { "generated": true, "approved": true }
+  },
+  "approval_basis": "Execução integral autorizada pelo usuário para ROL-01 a ROL-06; revisão técnica registrada nas evidências.",
+  "ready_for_implementation": true
+}
