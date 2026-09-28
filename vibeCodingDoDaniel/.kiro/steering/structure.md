@@ -2,7 +2,7 @@
 
 ## Organization Philosophy
 
-Standard Create React App flat structure, separating public assets from source code.
+The codebase is intentionally simple and flat for rapid prototype work. The project keeps game logic, UI, and CSS close to the feature while preserving a clear separation between the app shell and the mini-game components.
 
 ## Directory Patterns
 
@@ -13,28 +13,29 @@ Standard Create React App flat structure, separating public assets from source c
 
 ### Source Code
 **Location**: `vibe-code-do-daniel/src/`  
-**Purpose**: All application source code, components, CSS, and tests.  
-**Example**: `App.js`, `index.js`.
+**Purpose**: App shell, game components, styles, tests, and shared configuration.  
+**Example**: `App.js`, `minigames/reboot/RebootGame.js`.
 
 ## Naming Conventions
 
-- **Files**: PascalCase for React components (e.g., `App.js`), camelCase or lowercase for utilities and configurations.
-- **Styles**: Co-located CSS files with matching component names (e.g., `App.css` for `App.js`).
-- **Tests**: Co-located with `.test.js` suffix (e.g., `App.test.js`).
+- **Files**: PascalCase for React component files (e.g., `RebootGame.js`), camelCase for utility modules and config files.
+- **Styles**: Co-located CSS files matching the feature or component name.
+- **Tests**: Co-located with `.test.js` suffix and focused on component behavior.
+- **Mini-game folders**: Grouped under `src/minigames/<feature>/` to keep game logic isolated and reusable.
 
 ## Import Organization
 
 ```javascript
-// Example import patterns
-import React from 'react';
 import './App.css';
-import logo from './logo.svg';
+import RebootGame from './minigames/reboot/RebootGame';
 ```
 
 ## Code Organization Principles
 
-- Keep components flat in `src` until complexity warrants nested directories.
-- CSS and test files are kept adjacent to their respective components.
+- Keep the app shell minimal and responsible only for stage composition.
+- Keep each mini-game self-contained with its own logic, CSS, and config.
+- Use small component boundaries to simplify testing and future reuse.
+- Add shared logic only when the same rule is used across multiple game challenges.
 
 ---
 _Document patterns, not file trees. New files following patterns shouldn't require updates_
