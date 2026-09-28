@@ -1,7 +1,20 @@
 import './App.css';
+import FocoHarness from './minigames/foco/FocoHarness';
+import FocoErrorBoundary from './minigames/foco/FocoErrorBoundary';
 import RebootGame from './minigames/reboot/RebootGame';
 
 function App() {
+  // Ligação de teste reversível: abra com ?minigame=foco para jogar o Foco isolado.
+  // Sem esse parâmetro, a tela padrão continua igual (não invade a parte do core).
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('minigame') === 'foco') {
+    return (
+      <FocoErrorBoundary>
+        <FocoHarness />
+      </FocoErrorBoundary>
+    );
+  }
+
   return (
     <div className="App">
       <main className="app-shell">
