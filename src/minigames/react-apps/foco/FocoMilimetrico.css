@@ -1,54 +1,49 @@
-/* FocoMilimetrico.css — estados visuais do minigame. Requirements: 5.1, 5.2, 5.4, 7.1, 7.2 */
+/* FocoMilimetrico.css — alinhado ao design system (estilo Apple). */
 
 .foco {
-  max-width: 480px;
+  max-width: 520px;
   margin: 0 auto;
-  padding: 16px;
-  font-family: system-ui, sans-serif;
+  padding: 8px;
+  font-family: var(--sans, -apple-system, system-ui, sans-serif);
   text-align: center;
+  color: var(--ink, #1d1d1f);
 }
 
 .foco__title {
-  margin: 0 0 8px;
-  font-size: 1.25rem;
+  margin: 0 0 6px;
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.4px;
 }
 
 .foco__status {
-  margin: 8px 0;
+  margin: 8px 0 16px;
   font-weight: 600;
+  color: var(--muted, #7a7a7a);
 }
 
-/* Estado indicado por cor + texto (o texto vem do role=status). (7.1) */
-.foco[data-status='success'] .foco__status {
-  color: #1b7f2e;
-}
-.foco[data-status='fail'] .foco__status {
-  color: #b42318;
-}
-.foco[data-in-focus='true'][data-status='running'] .foco__status {
-  color: #1b7f2e;
-}
+.foco[data-status='success'] .foco__status { color: var(--ok, #22a04a); }
+.foco[data-status='fail'] .foco__status { color: var(--crit, #d11a2a); }
+.foco[data-in-focus='true'][data-status='running'] .foco__status { color: var(--ok, #22a04a); }
 
 .foco__track {
   position: relative;
-  height: 48px;
-  background: #eceff3;
-  border: 2px solid #b8c0cc;
-  border-radius: 8px;
+  height: 52px;
+  background: #f1f1f4;
+  border: 1px solid var(--hairline, #e0e0e0);
+  border-radius: var(--r-pill, 9999px);
   outline-offset: 3px;
 }
-.foco__track:focus-visible {
-  outline: 3px solid #2563eb;
-}
+.foco__track:focus-visible { outline: 2px solid var(--blue-focus, #0071e3); }
 
 /* Faixa de foco alvo. */
 .foco__zone {
   position: absolute;
   top: 0;
   bottom: 0;
-  background: rgba(27, 127, 46, 0.18);
-  border-left: 2px dashed #1b7f2e;
-  border-right: 2px dashed #1b7f2e;
+  background: rgba(34, 160, 74, 0.16);
+  border-left: 2px dashed var(--ok, #22a04a);
+  border-right: 2px dashed var(--ok, #22a04a);
 }
 
 /* Indicador do jogador. */
@@ -56,48 +51,50 @@
   position: absolute;
   top: 50%;
   width: 10px;
-  height: 60px;
+  height: 64px;
   margin-left: -5px;
   transform: translateY(-50%);
-  background: #334155;
-  border-radius: 4px;
+  background: var(--ink, #1d1d1f);
+  border-radius: var(--r-pill, 9999px);
   transition: left 60ms linear;
 }
 
-/* Dentro do foco: muda cor E forma (mais de um canal além da cor). (7.1) */
+/* Dentro do foco: muda cor E forma (mais de um canal além da cor). */
 .foco__indicator--focus {
-  background: #1b7f2e;
-  box-shadow: 0 0 0 3px rgba(27, 127, 46, 0.35);
+  background: var(--ok, #22a04a);
+  box-shadow: 0 0 0 4px rgba(34, 160, 74, 0.28);
 }
 
 .foco__meters {
   display: flex;
   justify-content: space-between;
-  margin-top: 12px;
+  margin-top: 16px;
   font-variant-numeric: tabular-nums;
-  color: #475569;
+  color: var(--muted, #7a7a7a);
+  font-size: 0.9rem;
 }
 
 .foco__hint {
-  margin-top: 12px;
+  margin-top: 14px;
   font-size: 0.85rem;
-  color: #64748b;
+  color: var(--muted, #7a7a7a);
 }
 
 .foco__restart {
-  margin-top: 12px;
-  padding: 8px 16px;
+  margin-top: 16px;
+  padding: 10px 22px;
   font-size: 1rem;
+  font-family: var(--sans, system-ui, sans-serif);
   border: 0;
-  border-radius: 6px;
-  background: #2563eb;
+  border-radius: var(--r-pill, 9999px);
+  background: var(--blue, #0066cc);
   color: #fff;
   cursor: pointer;
+  transition: transform 120ms ease, background-color 200ms ease;
 }
+.foco__restart:hover { background: var(--blue-focus, #0071e3); }
+.foco__restart:active { transform: scale(0.96); }
 
-/* Redução de movimento: desliga a animação do indicador. (7.2) */
 @media (prefers-reduced-motion: reduce) {
-  .foco__indicator {
-    transition: none;
-  }
+  .foco__indicator { transition: none; }
 }
