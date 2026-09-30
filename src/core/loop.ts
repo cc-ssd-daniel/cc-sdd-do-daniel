@@ -13,17 +13,14 @@ export class CoreLoop {
     constructor(containerId: string) {
         this.container = document.getElementById(containerId) as HTMLElement;
         this.patienceMeter = new PatienceMeter();
-        
+
         window.addEventListener('game:game-over', () => {
             this.setState('GAME_OVER');
         });
 
         window.addEventListener('game:patience-changed', (e: Event) => {
             const ce = e as CustomEvent;
-            const patienceDisplay = document.getElementById('patience-display');
-            if (patienceDisplay) {
-                patienceDisplay.innerText = `Paciência da Turma: ${ce.detail.current}%`;
-            }
+            this.updatePatienceHud(ce.detail.current);
         });
 
         this.render();
@@ -31,17 +28,32 @@ export class CoreLoop {
 
     private setState(state: 'MENU' | 'ROOM' | 'REPAIR' | 'GAME_OVER') {
         this.currentState = state;
+
+        // Pressão de tempo: a paciência decai enquanto o jogo está ativo.
+        // (Requirements 2.1, 2.2, 2.3)
+        if (state === 'ROOM' || state === 'REPAIR') {
+            this.patienceMeter.startDecay();
+        } else {
+            this.patienceMeter.stopDecay();
+        }
+
         this.render();
     }
 
     private render() {
+        const patience = this.patienceMeter.getPatience();
         this.container.innerHTML = `
-            <div id="hud" style="position: absolute; top: 10px; right: 10px; background: #eee; padding: 10px; border: 1px solid #000;">
-                <span id="patience-display">Paciência da Turma: ${this.patienceMeter.getPatience()}%</span>
+            <div id="hud" class="hud">
+                <span class="hud__label">Paciência da Turma</span>
+                <div class="meter" id="patience-meter">
+                    <div class="meter__fill" id="patience-fill"></div>
+                </div>
+                <span class="hud__value" id="patience-display">${patience}%</span>
             </div>
         `;
-        
+
         const screenContainer = document.createElement('div');
+        screenContainer.className = 'screen-host';
         this.container.appendChild(screenContainer);
 
         switch (this.currentState) {
@@ -58,27 +70,52 @@ export class CoreLoop {
                 this.renderGameOver(screenContainer);
                 break;
         }
+
+        this.updatePatienceHud(patience);
+    }
+
+    private updatePatienceHud(current: number) {
+        const display = document.getElementById('patience-display');
+        const fill = document.getElementById('patience-fill');
+        const meter = document.getElementById('patience-meter');
+        if (display) display.innerText = `${Math.round(current)}%`;
+        if (fill) fill.style.width = `${Math.max(0, Math.min(100, current))}%`;
+        // Estado crítico por mais de um canal: classe (cor) + rótulo textual. (Requirement 3.2)
+        if (meter) {
+            meter.classList.remove('meter--ok', 'meter--warn', 'meter--crit');
+            if (current <= 30) meter.classList.add('meter--crit');
+            else if (current <= 60) meter.classList.add('meter--warn');
+            else meter.classList.add('meter--ok');
+        }
+        if (display) {
+            display.classList.toggle('hud__value--crit', current <= 30);
+            display.innerText = current <= 30 ? `${Math.round(current)}% · crítico` : `${Math.round(current)}%`;
+        }
     }
 
     private renderMenu(container: HTMLElement) {
         container.innerHTML = `
-            <div class="screen">
-                <h1>Game Menu</h1>
-                <button id="btn-start">Entrar na Sala</button>
-            </div>
+            <section class="screen screen--hero">
+                <p class="eyebrow">Consertando o Projetor</p>
+                <h1 class="title">A aula vai começar.<br/>O projetor, não.</h1>
+                <p class="lead">Conserte o projetor antes que a turma perca a paciência.</p>
+                <button id="btn-start" class="btn btn--primary">Entrar na sala</button>
+            </section>
         `;
         document.getElementById('btn-start')?.addEventListener('click', () => this.setState('ROOM'));
     }
 
     private renderRoom(container: HTMLElement) {
         container.innerHTML = `
-            <div class="screen">
-                <h2>A Sala</h2>
-                <p>O equipamento quebrou!</p>
-                <button id="btn-repair">Modo Conserto</button>
-                <button id="btn-annoy">Irritar Turma (-20)</button>
-                <button id="btn-back">Voltar ao Menu</button>
-            </div>
+            <section class="screen">
+                <h2 class="title title--md">A sala</h2>
+                <p class="lead">O equipamento quebrou. A turma está esperando.</p>
+                <div class="btn-row">
+                    <button id="btn-repair" class="btn btn--primary">Modo Conserto</button>
+                    <button id="btn-annoy" class="btn btn--ghost">Irritar turma (-20)</button>
+                    <button id="btn-back" class="btn btn--quiet">Voltar ao menu</button>
+                </div>
+            </section>
         `;
         document.getElementById('btn-repair')?.addEventListener('click', () => this.setState('REPAIR'));
         document.getElementById('btn-back')?.addEventListener('click', () => this.setState('MENU'));
@@ -91,11 +128,11 @@ export class CoreLoop {
 
     private renderRepairMode(container: HTMLElement) {
         container.innerHTML = `
-            <div class="screen">
-                <h2 id="repair-title">Modo Conserto (Sequência)</h2>
-                <div id="minigame-container"></div>
-                <button id="btn-abandon" style="margin-top: 20px;">Abandonar Conserto</button>
-            </div>
+            <section class="screen screen--repair">
+                <h2 class="title title--md" id="repair-title">Modo Conserto</h2>
+                <div id="minigame-container" class="minigame-stage"></div>
+                <button id="btn-abandon" class="btn btn--quiet">Abandonar conserto</button>
+            </section>
         `;
         document.getElementById('btn-abandon')?.addEventListener('click', () => {
             this.currentMinigame?.unmount?.();
@@ -112,7 +149,6 @@ export class CoreLoop {
         }
 
         if (this.minigameQueue.length === 0) {
-            alert('Você consertou todos os sistemas com sucesso!');
             window.dispatchEvent(new CustomEvent('game:delta-patience', { detail: { delta: 20 } }));
             this.setState('ROOM');
             return;
@@ -120,14 +156,12 @@ export class CoreLoop {
 
         const NextGame = this.minigameQueue.shift();
         this.currentMinigame = new NextGame('minigame-container');
-        
-        this.currentMinigame!.onSuccess((res) => {
-            alert(`Minigame concluído! Score: ${res.score}`);
+
+        this.currentMinigame!.onSuccess(() => {
             this.playNextMinigame();
         });
 
-        this.currentMinigame!.onFailure((res) => {
-            alert('Falha no conserto! A turma ficou mais impaciente.');
+        this.currentMinigame!.onFailure(() => {
             window.dispatchEvent(new CustomEvent('game:delta-patience', { detail: { delta: -30 } }));
             this.currentMinigame?.unmount?.();
             this.setState('ROOM');
@@ -138,11 +172,12 @@ export class CoreLoop {
 
     private renderGameOver(container: HTMLElement) {
         container.innerHTML = `
-            <div class="screen">
-                <h2>GAME OVER</h2>
-                <p>A paciência da turma acabou e você foi expulso da sala.</p>
-                <button id="btn-restart">Tentar Novamente</button>
-            </div>
+            <section class="screen screen--hero">
+                <p class="eyebrow eyebrow--crit">Fim de jogo</p>
+                <h1 class="title">A turma perdeu a paciência.</h1>
+                <p class="lead">Você foi convidado a se retirar da sala.</p>
+                <button id="btn-restart" class="btn btn--primary">Tentar novamente</button>
+            </section>
         `;
         document.getElementById('btn-restart')?.addEventListener('click', () => {
             window.location.reload();
