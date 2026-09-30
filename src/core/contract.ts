@@ -8,4 +8,5 @@ export interface MinigameContract {
     onSuccess(callback: (result: MinigameResult) => void): void;
     onFailure(callback: (result: MinigameResult) => void): void;
     restart(): void;
+    unmount?(): void;
 }

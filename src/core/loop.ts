@@ -1,4 +1,4 @@
-import { MinigameContract } from './contract';
+import type { MinigameContract } from './contract';
 import { PatienceMeter } from './patience';
 import { FocoMinigame } from '../minigames/foco/foco';
 import { RebootMinigame } from '../minigames/reboot/reboot';
@@ -87,31 +87,53 @@ export class CoreLoop {
         });
     }
 
+    private minigameQueue: any[] = [];
+
     private renderRepairMode(container: HTMLElement) {
         container.innerHTML = `
             <div class="screen">
-                <h2>Modo Conserto</h2>
+                <h2 id="repair-title">Modo Conserto (Sequência)</h2>
                 <div id="minigame-container"></div>
                 <button id="btn-abandon" style="margin-top: 20px;">Abandonar Conserto</button>
             </div>
         `;
-        document.getElementById('btn-abandon')?.addEventListener('click', () => this.setState('ROOM'));
-
-        const games = [FocoMinigame, RebootMinigame, RoletaMinigame];
-        const RandomGame = games[Math.floor(Math.random() * games.length)];
-        this.currentMinigame = new RandomGame('minigame-container');
-        
-        this.currentMinigame.onSuccess((res) => {
-            alert(`Conserto Bem-sucedido! Score: ${res.score}`);
-            window.dispatchEvent(new CustomEvent('game:delta-patience', { detail: { delta: 10 } }));
+        document.getElementById('btn-abandon')?.addEventListener('click', () => {
+            this.currentMinigame?.unmount?.();
             this.setState('ROOM');
         });
-        this.currentMinigame.onFailure((res) => {
+
+        this.minigameQueue = [FocoMinigame, RebootMinigame, RoletaMinigame];
+        this.playNextMinigame();
+    }
+
+    private playNextMinigame() {
+        if (this.currentMinigame) {
+            this.currentMinigame.unmount?.();
+        }
+
+        if (this.minigameQueue.length === 0) {
+            alert('Você consertou todos os sistemas com sucesso!');
+            window.dispatchEvent(new CustomEvent('game:delta-patience', { detail: { delta: 20 } }));
+            this.setState('ROOM');
+            return;
+        }
+
+        const NextGame = this.minigameQueue.shift();
+        this.currentMinigame = new NextGame('minigame-container');
+        
+        this.currentMinigame!.onSuccess((res) => {
+            alert(`Minigame concluído! Score: ${res.score}`);
+            this.playNextMinigame();
+        });
+
+        this.currentMinigame!.onFailure((res) => {
             alert('Falha no conserto! A turma ficou mais impaciente.');
             window.dispatchEvent(new CustomEvent('game:delta-patience', { detail: { delta: -30 } }));
+            this.currentMinigame?.unmount?.();
             this.setState('ROOM');
         });
-        this.currentMinigame.start();
+
+        this.currentMinigame!.start();
     }
 
     private renderGameOver(container: HTMLElement) {
