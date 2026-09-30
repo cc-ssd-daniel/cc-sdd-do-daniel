@@ -1,6 +1,6 @@
 // Taxa padrão de decaimento da paciência por tempo (pontos por segundo).
 // Ponto único de configuração (Requirement 1.4).
-const DEFAULT_DECAY_RATE = 2; // -2% por segundo enquanto o jogo está ativo
+const DEFAULT_DECAY_RATE = 0.8; // -0.8% por segundo enquanto o jogo está ativo
 const TICK_MS = 200;          // frequência do temporizador de decaimento
 
 export class PatienceMeter {

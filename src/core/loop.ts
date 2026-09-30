@@ -5,7 +5,7 @@ import { RebootMinigame } from '../minigames/reboot/reboot';
 import { RoletaMinigame } from '../minigames/roleta/roleta';
 
 export class CoreLoop {
-    private currentState: 'MENU' | 'ROOM' | 'REPAIR' | 'GAME_OVER' = 'MENU';
+    private currentState: 'MENU' | 'ROOM' | 'REPAIR' | 'GAME_OVER' | 'VICTORY' = 'MENU';
     private container: HTMLElement;
     private currentMinigame?: MinigameContract;
     private patienceMeter: PatienceMeter;
@@ -26,7 +26,7 @@ export class CoreLoop {
         this.render();
     }
 
-    private setState(state: 'MENU' | 'ROOM' | 'REPAIR' | 'GAME_OVER') {
+    private setState(state: 'MENU' | 'ROOM' | 'REPAIR' | 'GAME_OVER' | 'VICTORY') {
         this.currentState = state;
 
         // Pressão de tempo: a paciência decai enquanto o jogo está ativo.
@@ -68,6 +68,9 @@ export class CoreLoop {
                 break;
             case 'GAME_OVER':
                 this.renderGameOver(screenContainer);
+                break;
+            case 'VICTORY':
+                this.renderVictory(screenContainer);
                 break;
         }
 
@@ -149,8 +152,9 @@ export class CoreLoop {
         }
 
         if (this.minigameQueue.length === 0) {
+            // Bônus por consertar tudo, e vai para a tela de vitória.
             window.dispatchEvent(new CustomEvent('game:delta-patience', { detail: { delta: 20 } }));
-            this.setState('ROOM');
+            this.setState('VICTORY');
             return;
         }
 
@@ -182,5 +186,43 @@ export class CoreLoop {
         document.getElementById('btn-restart')?.addEventListener('click', () => {
             window.location.reload();
         });
+    }
+
+    private renderVictory(container: HTMLElement) {
+        const patience = Math.round(this.patienceMeter.getPatience());
+        // Mensagem varia conforme a paciência que sobrou.
+        let medalha: string;
+        let recado: string;
+        if (patience >= 80) {
+            medalha = 'Mestre do Projetor';
+            recado = 'A turma nem percebeu que algo quebrou. Aula salva com folga.';
+        } else if (patience >= 50) {
+            medalha = 'Técnico da Sala';
+            recado = 'A imagem voltou a tempo. A turma respira aliviada.';
+        } else {
+            medalha = 'No sufoco';
+            recado = 'Foi por pouco, mas o projetor voltou antes da revolta.';
+        }
+
+        container.innerHTML = `
+            <section class="screen screen--hero screen--victory">
+                <p class="eyebrow">Conserto concluído</p>
+                <h1 class="title">Projetor consertado!</h1>
+                <p class="lead">${recado}</p>
+                <div class="victory-card">
+                    <span class="victory-card__badge">${medalha}</span>
+                    <div class="victory-card__meter">
+                        <div class="victory-card__fill" style="width:${patience}%"></div>
+                    </div>
+                    <span class="victory-card__score">Paciência da turma: ${patience}%</span>
+                </div>
+                <div class="btn-row">
+                    <button id="btn-continue" class="btn btn--primary">Continuar na sala</button>
+                    <button id="btn-menu" class="btn btn--quiet">Voltar ao menu</button>
+                </div>
+            </section>
+        `;
+        document.getElementById('btn-continue')?.addEventListener('click', () => this.setState('ROOM'));
+        document.getElementById('btn-menu')?.addEventListener('click', () => this.setState('MENU'));
     }
 }

@@ -204,3 +204,51 @@ body { margin: 0; background: var(--canvas); }
   .hud { top: 12px; right: 12px; padding: 10px 14px; }
   .meter { width: 100px; }
 }
+
+/* ---------- Tela de vitória ---------- */
+.screen--victory { background: var(--canvas); }
+
+.victory-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-top: 8px;
+  padding: 28px 36px;
+  background: var(--parchment);
+  border-radius: var(--r-card);
+  min-width: 320px;
+}
+
+.victory-card__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 18px;
+  border-radius: var(--r-pill);
+  background: var(--blue);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+}
+
+.victory-card__meter {
+  width: 260px;
+  height: 10px;
+  background: #e9e9ec;
+  border-radius: var(--r-pill);
+  overflow: hidden;
+}
+.victory-card__fill {
+  height: 100%;
+  background: var(--ok);
+  border-radius: var(--r-pill);
+  transition: width 600ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.victory-card__score {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
