@@ -1,6 +1,7 @@
 export class PatienceMeter {
     private currentPatience: number = 100;
     private maxPatience: number = 100;
+    private gameOverEmitted: boolean = false;
 
     constructor() {
         this.setupListeners();
@@ -21,7 +22,10 @@ export class PatienceMeter {
             detail: { current: this.currentPatience }
         }));
 
-        if (this.currentPatience === 0) {
+        if (this.currentPatience > 0) {
+            this.gameOverEmitted = false;
+        } else if (!this.gameOverEmitted) {
+            this.gameOverEmitted = true;
             window.dispatchEvent(new CustomEvent('game:game-over'));
         }
     }
