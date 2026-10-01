@@ -12,6 +12,15 @@ Este repositório contém o protótipo web **Projetor Simulator: Chamados da TI*
 - Use `spec.json` para registrar idioma, fase, aprovações e prontidão.
 - Não crie novas fontes de verdade em `steering/` ou `specs/` na raiz.
 
+## Comandos do workflow
+
+- Para descobrir o caminho de uma ideia: `/kiro-discovery "descrição"`.
+- Para iniciar uma spec: `/kiro-spec-init "descrição"`.
+- Para gerar requisitos, design e tarefas: `/kiro-spec-requirements`, `/kiro-spec-design` e `/kiro-spec-tasks`.
+- Para implementar: `/kiro-impl <feature>`.
+- Para conferir o estado: `/kiro-spec-status <feature>`.
+- Para validar a implementação: `/kiro-validate-impl <feature>`.
+
 ## Desenvolvimento
 
 - Stack: Vite, TypeScript, React 19 e React DOM.

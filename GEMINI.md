@@ -24,3 +24,7 @@ Antes de adicionar uma feature, confira:
 - testes e scripts disponíveis no `package.json`.
 
 Documentação nova do workflow deve ficar em `.kiro`, e Markdown de specs deve seguir o idioma definido no `spec.json`.
+
+## Atalho do workflow
+
+Para uma ideia nova, use `/kiro-discovery`. Para uma feature já delimitada, use `/kiro-spec-init`, depois `/kiro-spec-requirements`, `/kiro-spec-design`, `/kiro-spec-tasks` e `/kiro-impl`. Consulte o andamento com `/kiro-spec-status` e valide com `/kiro-validate-impl`.
