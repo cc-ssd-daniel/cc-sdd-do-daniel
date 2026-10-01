@@ -10,7 +10,7 @@ The project repository uses a cc-sdd workflow to organize discovery, specificati
 
 #### Acceptance Criteria
 1. When the project context is reviewed, the steering files shall describe the game’s purpose, scope, and technical stack accurately.
-2. When a new feature is added, the steering files shall remain relevant to the current project constraints and not rely on the default Create React App template alone.
+2. When a new feature is added, the steering files shall remain relevant to the current Vite, TypeScript, and React project constraints.
 3. While the project evolves, the AI context shall remain understandable to future contributors without requiring extra interpretation.
 
 ### Requirement 2: Spec and Workflow Traceability

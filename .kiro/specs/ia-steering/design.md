@@ -70,10 +70,10 @@ flowchart TD
 ```
 
 ### Modified Files
-- `vibeCodingDoDaniel/.kiro/steering/product.md` — ensure the game concept and value proposition stay aligned with the project.
-- `vibeCodingDoDaniel/.kiro/steering/tech.md` — confirm the implementation stack is accurate for the project.
-- `vibeCodingDoDaniel/.kiro/steering/structure.md` — keep the project layout conventions aligned with the app structure.
-- `vibeCodingDoDaniel/AGENTS.md` — keep the workflow instructions consistent with the spec-driven process.
+- `.kiro/steering/product.md` — manter o conceito e a proposta do jogo alinhados ao projeto.
+- `.kiro/steering/tech.md` — documentar Vite, TypeScript, React e os comandos atuais.
+- `.kiro/steering/structure.md` — manter os limites e caminhos reais da aplicação.
+- `AGENTS.md` e `GEMINI.md` — manter as instruções do workflow consistentes com o repositório.
 
 ## System Flows
 ```mermaid

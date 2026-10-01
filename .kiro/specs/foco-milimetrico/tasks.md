@@ -1,12 +1,12 @@
 # Implementation Plan — Foco Milimétrico
 
-- [ ] 1. Config de dificuldade (focoConfig.js)
+- [ ] 1. Config de dificuldade (`src/minigames/react-apps/foco/focoConfig.jsx`)
   - Definir os defaults documentados: largura da faixa, tempo-alvo de permanência, limite de overshoot, tempo máximo da rodada, min/max do indicador.
   - Implementar `validateConfig(config)` que aplica defaults para parâmetros ausentes e recusa parâmetros inválidos informando qual.
   - Observable: chamar `validateConfig({})` retorna os defaults; chamar com um parâmetro inválido lança/retorna erro nomeando o parâmetro.
   - _Requirements: 6.1, 6.2, 6.3_
 
-- [ ] 2. Motor de regra puro (focoEngine.js)
+- [ ] 2. Motor de regra puro (`src/minigames/react-apps/foco/focoEngine.jsx`)
   - [ ] 2.1 Estado e movimento do indicador
     - Criar `createFocoEngine(config)` com estado inicial (`position`, `timeInFocus`, `penalty`, `timeRemaining`, `status`, `inFocus`).
     - Implementar `move(delta)` respeitando os limites min/max.
@@ -27,12 +27,12 @@
     - Observable: após `reset`, `getState()` retorna o estado inicial.
     - _Requirements: 1.4_
 
-- [ ] 3. Serviços fake para execução isolada (minigames/fakes/fakeServices.js)
+- [ ] 3. Serviços fake para execução isolada
   - Implementar `patience.applyDelta`, `audio.play`, `audio.vibrate`, `storage.get/set` como fakes que registram chamadas.
   - Observable: os fakes podem ser inspecionados nos testes (ex.: lista de deltas aplicados).
   - _Requirements: 1.1, 4.3_
 
-- [ ] 4. Adapter do contrato comum (focoContract.js)
+- [ ] 4. Adapter do contrato interno (`src/minigames/react-apps/foco/focoContract.jsx`)
   - Implementar `createFocoContract({ onComplete, onFail })` com `start(config, services)`, `reset()`, `dispose()`.
   - `start` valida config, cria o engine, guarda `services` e inicia o loop de tempo; sucesso chama `onComplete(result)`, falha chama `onFail(reason)`; overshoot chama `services.patience.applyDelta`.
   - `dispose` remove timers/listeners.
@@ -40,13 +40,13 @@
   - _Requirements: 1.1, 1.2, 1.3, 1.5, 4.3_
   - _Depends: 1, 2, 3_
 
-- [ ] 5. Hook de tempo (useFocoEngine.js)
+- [ ] 5. Hook de tempo (`src/minigames/react-apps/foco/useFocoEngine.jsx`)
   - Rodar o engine no tempo com `requestAnimationFrame`/timer, expor estado e handlers de entrada, limpar no unmount.
   - Observable: o hook avança o estado ao longo do tempo e para ao desmontar.
   - _Requirements: 2.1, 3.1_
   - _Depends: 2_
 
-- [ ] 6. Componente de apresentação (FocoMilimetrico.js + .css)
+- [ ] 6. Componente de apresentação (`src/minigames/react-apps/foco/FocoMilimetrico.jsx` + `.css`)
   - Renderizar faixa, indicador e feedback; capturar entrada por teclado (setas) e ponteiro; indicar foco por mais de um canal (cor + texto/ícone); respeitar `prefers-reduced-motion`; emitir vibração no overshoot quando suportado.
   - Observable: setas movem o indicador; estado de foco tem indicação textual além de cor; feedback de sucesso/falha aparece.
   - _Requirements: 2.2, 5.1, 5.2, 5.3, 5.4, 7.1, 7.2, 7.3, 7.4_

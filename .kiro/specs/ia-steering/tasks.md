@@ -7,7 +7,7 @@
 
 - [x] 1.1 Compare steering content against the real game concept
   - Review the repo purpose, app stack, and player-facing design.
-  - Check whether the current `.kiro/steering` files reflect the real project instead of the default CRA template alone.
+  - Check whether the current `.kiro/steering` files reflect the real Vite/TypeScript project.
   - _Requirements: 1_
 
 - [x] 2. Update the AI and project guidance files

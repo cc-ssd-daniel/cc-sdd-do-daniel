@@ -6,6 +6,6 @@ O contrato local tem MinigameController.start/succeed/fail/restart/destroy e eve
 
 A Roleta inicial em games/InputRoulette.js fornece entradas e parâmetros de velocidade/delta, mas não falha por erros, não recebe acessibilidade e não possui testes próprios. Ela é preservada como trabalho preexistente; a nova entrega está na pasta exclusiva roleta.
 
-Não foram adicionadas bibliotecas: React, Jest, Testing Library e Webpack já fazem parte do projeto. Persistência usa a API nativa atrás de injeção. O runner padrão CRA busca testes apenas em src; um runner dentro de tests/roleta reutiliza Babel/Jest/Testing Library instalados e inclui a pasta exclusiva sem editar package.json.
+Não foram adicionadas bibliotecas específicas para a Roleta. A implementação atual usa React/JSX dentro da aplicação Vite e serviços injetados. Não há `tests/roleta` nem runner Jest declarado no `package.json` atual; os registros históricos desses caminhos pertencem à base anterior e não devem ser usados como validação desta versão.
 
 Decisões simplificadoras: seleção por nome em vez de geometria; resultado único por tentativa; timers canceláveis; fixture mínima observa deltas sem assumir limites do módulo global. Nenhuma migração de contrato ou de arquivos dos colegas.

@@ -6,7 +6,7 @@
   - _Requirements: 1, 5_
 
 - [x] 1.1 Create the reboot component skeleton
-  - Add `src/minigames/reboot/RebootGame.js` and `rebootConfig.js` with basic exports and default configuration.
+  - Add the React component under `src/minigames/react-apps/reboot/` and the public adapter under `src/minigames/reboot/reboot.tsx`.
   - Confirm the component renders in the app without breaking the existing React shell.
   - _Requirements: 1, 5_
 

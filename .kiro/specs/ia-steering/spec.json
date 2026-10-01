@@ -1,7 +1,22 @@
 {
-  "name": "ia-steering",
-  "title": "IA e steering",
-  "description": "Define the project memory, steering guidance, and commit conventions that keep the cc-sdd workflow aligned with the game project context and team responsibilities.",
+  "feature_name": "ia-steering",
+  "created_at": "2026-09-25T00:00:00Z",
+  "updated_at": "2026-10-01T00:00:00Z",
   "language": "en",
-  "status": "draft"
+  "phase": "tasks-generated",
+  "approvals": {
+    "requirements": {
+      "generated": true,
+      "approved": false
+    },
+    "design": {
+      "generated": true,
+      "approved": false
+    },
+    "tasks": {
+      "generated": true,
+      "approved": false
+    }
+  },
+  "ready_for_implementation": true
 }

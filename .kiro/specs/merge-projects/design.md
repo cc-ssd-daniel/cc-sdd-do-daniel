@@ -1,11 +1,9 @@
 # Design de Arquitetura
 
 ## Abordagem de Integração
-Os dois projetos contêm versões dos mesmos minigames (`fake`, `foco`, `reboot`, `roleta`).
-O projeto principal (`cc-sdd-do-daniel`) foi estruturado em Vanilla TypeScript + Vite.
-O projeto aninhado (`vibe-code-do-daniel`) foi feito em React + JavaScript.
+O projeto foi consolidado em uma única aplicação Vite com TypeScript no shell e React/JSX nos componentes dos minigames. A pasta do projeto anterior não faz parte da base atual.
 
-**Decisão Arquitetural:** O projeto raiz em Vanilla TS + Vite será mantido como a fonte de verdade. As lógicas de interface do React (`vibe-code-do-daniel`) que ainda não foram migradas serão convertidas para o sistema de componentes Vanilla, e os assets visuais e de estilo transferidos. Em seguida, o diretório React será apagado, unificando a base.
+**Decisão arquitetural concluída:** o projeto raiz é a fonte de verdade. Os wrappers TypeScript em `src/minigames/` adaptam os componentes React em `src/minigames/react-apps/` ao `CoreLoop`.
 
 ## Arquitetura Sequencial (Game Flow Controller)
 Para permitir que um minigame seja executado em seguida do outro:
@@ -17,14 +15,13 @@ Para permitir que um minigame seja executado em seguida do outro:
      2. Instancia e monta o próximo minigame da fila.
      3. (Opcional) Mostra uma tela de transição entre eles.
 
-2. **Interface Padrão para Minigames (`MinigameContract`):**
-   - Os arquivos de TS em `src/minigames/` (`fake.ts`, `foco.ts`, etc.) devem implementar uma interface comum, contendo pelo menos:
-     - `mount(container: HTMLElement, onComplete: () => void): void`
-     - `unmount(): void`
+2. **Interface padrão para minigames (`MinigameContract`):**
+   - Os wrappers em `src/minigames/` implementam `start`, `onSuccess`, `onFailure`, `restart` e `unmount` opcional.
+   - O contrato detalhado está em `.kiro/steering/contract.md` e `src/core/contract.ts`.
 
 ## Estrutura Centralizada
 - **Documentação & Tasks:** Todo o plano, histórico de tasks antigas e andamento atual das specs ficarão centralizados na pasta `.kiro/specs/` (ex: pastas já existentes para `foco-milimetrico`, `reboot-de-10-segundos`, `roleta`, e esta spec `merge-projects`).
 - **Assets e Estilos:** Os diretórios `public/` e `src/assets/` concentrarão os arquivos estáticos de ambos os projetos.
 
 ## Tratamento de Falhas e Fluxos Limites
-- Se um minigame der erro ou se o usuário quiser pular, o controlador poderá expor uma ação de `skip()` para forçar o carregamento do próximo item na fila.
+- Se um minigame der erro, o core encerra a tentativa, aplica a consequência de paciência e retorna à sala.
