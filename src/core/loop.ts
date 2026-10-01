@@ -3,40 +3,48 @@ import { PatienceMeter } from './patience';
 import { FocoMinigame } from '../minigames/foco/foco';
 import { RebootMinigame } from '../minigames/reboot/reboot';
 import { RoletaMinigame } from '../minigames/roleta/roleta';
+import { CaboMinigame } from '../minigames/cabo/CaboMinigame';
+import { EquilibrioMinigame } from '../minigames/equilibrio/EquilibrioMinigame';
+import { SenhaMinigame } from '../minigames/senha/SenhaMinigame';
+import { CutsceneManager } from './cutscenes';
+import type { DialogueLine } from './cutscenes';
+
+interface MinigameEntry {
+    GameClass: new (id: string) => MinigameContract;
+    cutscene: DialogueLine[];
+}
 
 export class CoreLoop {
     private currentState: 'MENU' | 'ROOM' | 'REPAIR' | 'GAME_OVER' | 'VICTORY' = 'MENU';
     private container: HTMLElement;
     private currentMinigame?: MinigameContract;
     private patienceMeter: PatienceMeter;
+    private cutsceneManager: CutsceneManager;
+    private minigameQueue: MinigameEntry[] = [];
 
     constructor(containerId: string) {
         this.container = document.getElementById(containerId) as HTMLElement;
         this.patienceMeter = new PatienceMeter();
 
-        window.addEventListener('game:game-over', () => {
-            this.setState('GAME_OVER');
-        });
-
-        window.addEventListener('game:patience-changed', (e: Event) => {
-            const ce = e as CustomEvent;
-            this.updatePatienceHud(ce.detail.current);
+        window.addEventListener('game:patience-changed', (e: any) => {
+            const patience = e.detail.current;
+            this.updatePatienceHud(patience);
+            if (patience <= 0 && this.currentState !== 'GAME_OVER') {
+                this.setState('GAME_OVER');
+            }
         });
 
         this.render();
+        // Inicializa o manager de cutscenes passando o id do container principal
+        this.cutsceneManager = new CutsceneManager(containerId);
     }
 
-    private setState(state: 'MENU' | 'ROOM' | 'REPAIR' | 'GAME_OVER' | 'VICTORY') {
-        this.currentState = state;
-
-        // Pressão de tempo: a paciência decai enquanto o jogo está ativo.
-        // (Requirements 2.1, 2.2, 2.3)
-        if (state === 'ROOM' || state === 'REPAIR') {
-            this.patienceMeter.startDecay();
-        } else {
-            this.patienceMeter.stopDecay();
+    private setState(newState: 'MENU' | 'ROOM' | 'REPAIR' | 'GAME_OVER' | 'VICTORY') {
+        if (this.currentMinigame) {
+            this.currentMinigame.unmount?.();
+            this.currentMinigame = undefined;
         }
-
+        this.currentState = newState;
         this.render();
     }
 
@@ -83,7 +91,6 @@ export class CoreLoop {
         const meter = document.getElementById('patience-meter');
         if (display) display.innerText = `${Math.round(current)}%`;
         if (fill) fill.style.width = `${Math.max(0, Math.min(100, current))}%`;
-        // Estado crítico por mais de um canal: classe (cor) + rótulo textual. (Requirement 3.2)
         if (meter) {
             meter.classList.remove('meter--ok', 'meter--warn', 'meter--crit');
             if (current <= 30) meter.classList.add('meter--crit');
@@ -114,7 +121,7 @@ export class CoreLoop {
                 <h2 class="title title--md">A sala</h2>
                 <p class="lead">O equipamento quebrou. A turma está esperando.</p>
                 <div class="btn-row">
-                    <button id="btn-repair" class="btn btn--primary">Modo Conserto</button>
+                    <button id="btn-repair" class="btn btn--primary">Modo Conserto (1ª Pessoa)</button>
                     <button id="btn-annoy" class="btn btn--ghost">Irritar turma (-20)</button>
                     <button id="btn-back" class="btn btn--quiet">Voltar ao menu</button>
                 </div>
@@ -127,14 +134,12 @@ export class CoreLoop {
         });
     }
 
-    private minigameQueue: any[] = [];
-
     private renderRepairMode(container: HTMLElement) {
         container.innerHTML = `
             <section class="screen screen--repair">
-                <h2 class="title title--md" id="repair-title">Modo Conserto</h2>
-                <div id="minigame-container" class="minigame-stage"></div>
-                <button id="btn-abandon" class="btn btn--quiet">Abandonar conserto</button>
+                <h2 class="title title--md" id="repair-title">Reparos em Andamento...</h2>
+                <div id="minigame-container" class="minigame-stage" style="background:#111; border: 2px solid #444;"></div>
+                <button id="btn-abandon" class="btn btn--quiet" style="margin-top: 15px;">Abandonar conserto</button>
             </section>
         `;
         document.getElementById('btn-abandon')?.addEventListener('click', () => {
@@ -142,7 +147,56 @@ export class CoreLoop {
             this.setState('ROOM');
         });
 
-        this.minigameQueue = [FocoMinigame, RebootMinigame, RoletaMinigame];
+        this.minigameQueue = [
+            {
+                GameClass: CaboMinigame,
+                cutscene: [
+                    { speaker: "Prof. Carlos", text: "Graças a Deus a TI chegou! Os alunos estão me engolindo vivo..." },
+                    { speaker: "Prof. Carlos", text: "O cabo VGA desconectou do teto de novo. Mas tem um problema pior..." },
+                    { speaker: "Prof. Carlos", text: "A lâmpada quebrou a trava de segurança. Ela tá disparando um flash de 5.000 lúmens que cega qualquer um!" },
+                    { speaker: "Você (TI)", text: "...Deixa comigo. Vou no escuro.", color: "#ff3366" }
+                ]
+            },
+            {
+                GameClass: FocoMinigame,
+                cutscene: [
+                    { speaker: "Aluno no Fundo", text: "Ih, a imagem tá toda borrada! Não dá pra ler nada!" },
+                    { speaker: "Prof. Carlos", text: "TI, ajusta o foco milimétrico! Rápido, eles estão perdendo a paciência!" },
+                    { speaker: "Você (TI)", text: "Essas lentes velhas são impossíveis de girar. Lá vou eu...", color: "#ff3366" }
+                ]
+            },
+            {
+                GameClass: EquilibrioMinigame,
+                cutscene: [
+                    { speaker: "Prof. Carlos", text: "O projetor desalinhou, você vai ter que subir ali." },
+                    { speaker: "Você (TI)", text: "Não tem escada?", color: "#ff3366" },
+                    { speaker: "Prof. Carlos", text: "Use aquela cadeira de rodinhas quebrada. Só tenta não cair, por favor." }
+                ]
+            },
+            {
+                GameClass: RebootMinigame,
+                cutscene: [
+                    { speaker: "Sistema do Projetor", text: "[ERRO 404] - TELA AZUL DE PROJEÇÃO" },
+                    { speaker: "Você (TI)", text: "Vou ter que segurar o botão de power por 10 segundos para forçar o reboot.", color: "#ff3366" },
+                    { speaker: "Turma", text: "ARRUMA LOGO ISSO!!!" }
+                ]
+            },
+            {
+                GameClass: RoletaMinigame,
+                cutscene: [
+                    { speaker: "Você (TI)", text: "Falta só configurar a entrada. Vamos ver em qual canal o PC tá conectado...", color: "#ff3366" },
+                    { speaker: "Prof. Carlos", text: "Cuidado! Esse modelo antigo é uma roleta russa. Se escolher a entrada errada, ele queima!" }
+                ]
+            },
+            {
+                GameClass: SenhaMinigame,
+                cutscene: [
+                    { speaker: "Projetor", text: "INSIRA A SENHA ADMINISTRATIVA PARA LIBERAR A PROJEÇÃO" },
+                    { speaker: "Prof. Carlos", text: "Nossa, eu esqueci a senha! Acho que era Pr0jetor@123!" },
+                    { speaker: "Você (TI)", text: "Tenho poucos segundos para digitar antes do bloqueio de segurança...", color: "#ff3366" }
+                ]
+            }
+        ];
         this.playNextMinigame();
     }
 
@@ -152,26 +206,31 @@ export class CoreLoop {
         }
 
         if (this.minigameQueue.length === 0) {
-            // Bônus por consertar tudo, e vai para a tela de vitória.
             window.dispatchEvent(new CustomEvent('game:delta-patience', { detail: { delta: 20 } }));
             this.setState('VICTORY');
             return;
         }
 
-        const NextGame = this.minigameQueue.shift();
-        this.currentMinigame = new NextGame('minigame-container');
+        const nextEntry = this.minigameQueue.shift()!;
+        
+        // Show cutscene first
+        this.cutsceneManager.play(nextEntry.cutscene, () => {
+            // Cutscene done, start minigame
+            this.currentMinigame = new nextEntry.GameClass('minigame-container');
 
-        this.currentMinigame!.onSuccess(() => {
-            this.playNextMinigame();
+            this.currentMinigame!.onSuccess(() => {
+                window.dispatchEvent(new CustomEvent('game:delta-patience', { detail: { delta: 15 } }));
+                this.playNextMinigame();
+            });
+
+            this.currentMinigame!.onFailure(() => {
+                window.dispatchEvent(new CustomEvent('game:delta-patience', { detail: { delta: -30 } }));
+                this.currentMinigame?.unmount?.();
+                this.setState('ROOM');
+            });
+
+            this.currentMinigame!.start();
         });
-
-        this.currentMinigame!.onFailure(() => {
-            window.dispatchEvent(new CustomEvent('game:delta-patience', { detail: { delta: -30 } }));
-            this.currentMinigame?.unmount?.();
-            this.setState('ROOM');
-        });
-
-        this.currentMinigame!.start();
     }
 
     private renderGameOver(container: HTMLElement) {
@@ -190,7 +249,6 @@ export class CoreLoop {
 
     private renderVictory(container: HTMLElement) {
         const patience = Math.round(this.patienceMeter.getPatience());
-        // Mensagem varia conforme a paciência que sobrou.
         let medalha: string;
         let recado: string;
         if (patience >= 80) {
