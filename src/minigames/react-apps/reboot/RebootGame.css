@@ -1,29 +1,32 @@
+/* RebootGame.css — alinhado ao design system (estilo Apple, tile escuro limpo). */
+
 .reboot-game {
-  width: min(100%, 480px);
+  width: min(100%, 520px);
   margin: 0 auto;
-  padding: 2rem;
-  border-radius: 22px;
-  background: linear-gradient(180deg, #111827 0%, #1f2937 100%);
-  border: 1px solid rgba(148, 163, 184, 0.28);
-  box-shadow: 0 22px 50px rgba(15, 23, 42, 0.38);
-  color: #f8fafc;
+  padding: 28px;
+  border-radius: var(--r-card, 18px);
+  background: var(--tile-dark, #272729);
+  border: none;
+  color: var(--on-dark, #ffffff);
+  font-family: var(--sans, -apple-system, system-ui, sans-serif);
 }
 
-.reboot-game__header {
-  margin-bottom: 1rem;
-}
+.reboot-game__header { margin-bottom: 16px; }
 
 .reboot-game__eyebrow {
-  margin: 0 0 0.25rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-size: 0.7rem;
-  color: #7dd3fc;
+  margin: 0 0 4px;
+  text-transform: none;
+  letter-spacing: 0.2px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--blue-on-dark, #2997ff);
 }
 
 .reboot-game__header h2 {
   margin: 0;
-  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-size: clamp(1.6rem, 3vw, 2.1rem);
+  font-weight: 600;
+  letter-spacing: -0.6px;
 }
 
 .reboot-game__status-row {
@@ -31,90 +34,56 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 16px;
 }
 
-.reboot-game__status {
-  font-size: 0.9rem;
-  color: #bfdbfe;
-}
+.reboot-game__status { font-size: 0.9rem; color: #cccccc; }
 
 .reboot-game__badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.4rem 0.7rem;
-  border-radius: 999px;
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--r-pill, 9999px);
   font-size: 0.72rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0.2px;
 }
+.reboot-game__badge--idle { background: rgba(41, 151, 255, 0.16); color: #90c8ff; }
+.reboot-game__badge--active { background: rgba(229, 163, 0, 0.18); color: #ffd479; }
+.reboot-game__badge--success { background: rgba(34, 160, 74, 0.2); color: #7ee2a0; }
+.reboot-game__badge--failure { background: rgba(209, 26, 42, 0.2); color: #ff9aa4; }
 
-.reboot-game__badge--idle {
-  background: rgba(59, 130, 246, 0.18);
-  color: #bfdbfe;
-}
-
-.reboot-game__badge--active {
-  background: rgba(234, 179, 8, 0.15);
-  color: #fcd34d;
-}
-
-.reboot-game__badge--success {
-  background: rgba(34, 197, 94, 0.18);
-  color: #86efac;
-}
-
-.reboot-game__badge--failure {
-  background: rgba(239, 68, 68, 0.18);
-  color: #fca5a5;
-}
-
-.reboot-game__instruction {
-  margin: 0 0 1rem;
-  line-height: 1.5;
-  color: #dbeafe;
-}
+.reboot-game__instruction { margin: 0 0 16px; line-height: 1.5; color: #dddddd; }
 
 .reboot-game__meter {
   position: relative;
-  margin-bottom: 1rem;
-  height: 22px;
-  border-radius: 999px;
+  margin-bottom: 16px;
+  height: 18px;
+  border-radius: var(--r-pill, 9999px);
   overflow: hidden;
-  background: rgba(148, 163, 184, 0.22);
-  border: 1px solid rgba(148, 163, 184, 0.45);
+  background: rgba(255, 255, 255, 0.12);
+  border: none;
 }
-
-.reboot-game__meter-track {
-  position: absolute;
-  inset: 0;
-}
-
+.reboot-game__meter-track { position: absolute; inset: 0; }
 .reboot-game__meter-fill {
   position: absolute;
   inset: 0 auto 0 0;
   width: 0;
-  background: linear-gradient(90deg, #f59e0b 0%, #f97316 100%);
+  background: var(--warn, #e5a300);
   transition: width 0.1s linear, background 0.15s ease;
 }
-
-.reboot-game__meter-fill.safe {
-  background: linear-gradient(90deg, #22c55e 0%, #4ade80 100%);
-}
-
-.reboot-game__meter-fill.danger {
-  background: linear-gradient(90deg, #ef4444 0%, #fda4af 100%);
-}
+.reboot-game__meter-fill.safe { background: var(--ok, #22a04a); }
+.reboot-game__meter-fill.danger { background: var(--crit, #d11a2a); }
 
 .reboot-game__safe-zone {
   position: absolute;
   top: 0;
   bottom: 0;
-  background: rgba(34, 197, 94, 0.22);
-  border-left: 1px solid rgba(134, 239, 172, 0.75);
-  border-right: 1px solid rgba(134, 239, 172, 0.75);
+  background: rgba(34, 160, 74, 0.24);
+  border-left: 1px solid rgba(126, 226, 160, 0.75);
+  border-right: 1px solid rgba(126, 226, 160, 0.75);
 }
 
 .reboot-game__readout {
@@ -122,70 +91,61 @@
   align-items: center;
   justify-content: space-between;
   margin: 0.5rem 0 1.25rem;
-  color: #e2e8f0;
+  color: #e2e2e6;
 }
-
-.reboot-game__readout strong {
-  font-size: 1.1rem;
-  color: #f8fafc;
-}
+.reboot-game__readout strong { font-size: 1.1rem; color: #fff; }
 
 .reboot-game__button {
   width: 100%;
   border: none;
-  border-radius: 18px;
-  padding: 1.25rem 1rem;
+  border-radius: var(--r-pill, 9999px);
+  padding: 18px 16px;
   font-size: 1.05rem;
-  font-weight: 700;
+  font-weight: 600;
+  font-family: var(--sans, system-ui, sans-serif);
   cursor: pointer;
-  background: linear-gradient(180deg, #f59e0b 0%, #ea580c 100%);
+  background: var(--blue, #0066cc);
   color: #fff;
-  box-shadow: 0 14px 24px rgba(234, 88, 12, 0.38);
-  transition: transform 0.1s ease, box-shadow 0.15s ease;
+  transition: transform 0.1s ease, background 0.15s ease;
 }
-
 .reboot-game__button:active,
 .reboot-game__button.is-pressed {
-  transform: scale(0.98);
-  box-shadow: 0 8px 18px rgba(234, 88, 12, 0.25);
-  background: linear-gradient(180deg, #fbbf24 0%, #f97316 100%);
+  transform: scale(0.97);
+  background: var(--blue-focus, #0071e3);
 }
 
 .reboot-game__result {
-  margin-top: 1rem;
-  border-radius: 12px;
+  margin-top: 16px;
+  border-radius: var(--r-sm, 8px);
   padding: 0.75rem 1rem;
   font-weight: 600;
 }
-
 .reboot-game__result--success {
-  background: rgba(34, 197, 94, 0.16);
-  color: #bbf7d0;
-  border: 1px solid rgba(134, 239, 172, 0.6);
+  background: rgba(34, 160, 74, 0.18);
+  color: #a8ecc0;
 }
-
 .reboot-game__result--too-early,
 .reboot-game__result--too-late {
-  background: rgba(239, 68, 68, 0.12);
-  color: #fecaca;
-  border: 1px solid rgba(252, 165, 165, 0.8);
+  background: rgba(209, 26, 42, 0.16);
+  color: #ffb3ba;
 }
 
 .reboot-game__start {
-  margin-top: 1rem;
+  margin-top: 16px;
   width: 100%;
   border: none;
-  border-radius: 12px;
-  background: #0ea5e9;
-  color: #f8fafc;
-  padding: 0.8rem 1rem;
-  font-weight: 700;
+  border-radius: var(--r-pill, 9999px);
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  padding: 0.85rem 1rem;
+  font-weight: 600;
+  font-family: var(--sans, system-ui, sans-serif);
   cursor: pointer;
+  transition: background 0.15s ease;
 }
+.reboot-game__start:hover { background: rgba(255, 255, 255, 0.22); }
 
 @media (prefers-reduced-motion: reduce) {
   .reboot-game__meter-fill,
-  .reboot-game__button {
-    transition: none;
-  }
+  .reboot-game__button { transition: none; }
 }
