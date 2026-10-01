@@ -1,11 +1,12 @@
 // Taxa padrão de decaimento da paciência por tempo (pontos por segundo).
 // Ponto único de configuração (Requirement 1.4).
-const DEFAULT_DECAY_RATE = 0.8; // -0.8% por segundo enquanto o jogo está ativo
-const TICK_MS = 200;          // frequência do temporizador de decaimento
+const DEFAULT_DECAY_RATE = 0.8;
+const TICK_MS = 200;
 
 export class PatienceMeter {
     private currentPatience: number = 100;
     private maxPatience: number = 100;
+    private gameOverEmitted: boolean = false;
     private decayTimer: ReturnType<typeof setInterval> | null = null;
     private decayRate: number = DEFAULT_DECAY_RATE;
 
@@ -22,21 +23,27 @@ export class PatienceMeter {
     }
 
     private applyDelta(delta: number) {
-        this.currentPatience = Math.min(this.maxPatience, Math.max(0, this.currentPatience + delta));
+        this.currentPatience = Math.min(
+            this.maxPatience,
+            Math.max(0, this.currentPatience + delta)
+        );
 
         window.dispatchEvent(new CustomEvent('game:patience-changed', {
             detail: { current: this.currentPatience }
         }));
 
-        if (this.currentPatience === 0) {
-            this.stopDecay(); // não continua decaindo após o fim de jogo
+        if (this.currentPatience > 0) {
+            this.gameOverEmitted = false;
+        } else if (!this.gameOverEmitted) {
+            this.gameOverEmitted = true;
+            this.stopDecay();
             window.dispatchEvent(new CustomEvent('game:game-over'));
         }
     }
 
     /**
-     * Inicia (ou reinicia) o decaimento por tempo. (Requirements 1.1, 1.2, 1.3)
-     * Sempre limpa um timer anterior para evitar decaimento duplicado (Requirement 2.4).
+     * Inicia ou reinicia o decaimento por tempo.
+     * Sempre limpa o timer anterior para evitar decaimento duplicado.
      */
     public startDecay(ratePerSecond: number = DEFAULT_DECAY_RATE) {
         this.stopDecay();
@@ -47,7 +54,7 @@ export class PatienceMeter {
         }, TICK_MS);
     }
 
-    /** Para o decaimento por tempo. (Requirements 2.1, 2.2, 2.4) */
+    /** Para o decaimento por tempo. */
     public stopDecay() {
         if (this.decayTimer !== null) {
             clearInterval(this.decayTimer);

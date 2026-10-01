@@ -1,8 +1,8 @@
 {
-  "feature_name": "ia-steering",
-  "created_at": "2026-09-25T00:00:00Z",
+  "feature_name": "paciencia",
+  "created_at": "2026-10-01T00:00:00Z",
   "updated_at": "2026-10-01T00:00:00Z",
-  "language": "en",
+  "language": "pt-BR",
   "phase": "tasks-generated",
   "approvals": {
     "requirements": {
@@ -18,5 +18,5 @@
       "approved": false
     }
   },
-  "ready_for_implementation": true
+  "ready_for_implementation": false
 }

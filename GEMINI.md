@@ -1,70 +1,30 @@
-# Agentic SDLC and Spec-Driven Development
+# Contexto para agentes
 
-Kiro-style Spec-Driven Development on an agentic SDLC
+O projeto é o **Projetor Simulator: Chamados da TI**, uma SPA de prototipação de jogos curtos sobre suporte técnico em sala de aula.
 
-## Project Memory
-Project memory keeps persistent guidance (steering, specs notes, component docs) so Gemini CLI honors your standards each run. Treat it as the long-lived source of truth for patterns, conventions, and decisions.
+## Fonte de verdade
 
-- Use `.kiro/steering/` for project-wide policies: architecture principles, naming schemes, security constraints, tech stack decisions, api standards, etc.
-- Use local `GEMINI.md` files for feature or library context (e.g. `src/lib/payments/GEMINI.md`): describe domain assumptions, API contracts, or testing conventions specific to that folder. Gemini CLI auto-loads these when working in the matching path.
-- Specs notes stay with each spec (under `.kiro/specs/`) to guide specification-level workflows.
+1. `.kiro/steering/` contém as regras estáveis do produto, tecnologia, estrutura e contratos.
+2. `.kiro/specs/` contém o ciclo de cada feature.
+3. `src/` contém a implementação atual; quando houver conflito, o código e a validação devem ser comparados com a spec antes de decidir.
 
-## Project Context
+## Stack e execução
 
-### Paths
-- Steering: `.kiro/steering/`
-- Specs: `.kiro/specs/`
+O projeto usa Vite, TypeScript, React 19 e React DOM. Os comandos são `npm run dev` e `npm run build`. Não presumir Create React App, `react-scripts`, `npm start` ou uma pasta `vibe-code-do-daniel`.
 
-### Steering vs Specification
+## Arquitetura
 
-**Steering** (`.kiro/steering/`) - Guide AI with project-wide rules and context
-**Specs** (`.kiro/specs/`) - Formalize development process for individual features
+`src/core/loop.ts` coordena o fluxo. Os wrappers em `src/minigames/` adaptam componentes e engines internos ao contrato público do core. Os três minigames integrados são Foco Milimétrico, Reboot de 10 segundos e Roleta do Input.
 
-### Active Specifications
-- Check `.kiro/specs/` for active specifications
-- Use `/kiro-spec-status [feature-name]` to check progress
+Antes de adicionar uma feature, confira:
 
-## Development Guidelines
-- Think in English, generate responses in English. All Markdown content written to project files (e.g., requirements.md, design.md, tasks.md, research.md, validation reports) MUST be written in the target language configured for this specification (see spec.json.language).
+- limites do domínio em `.kiro/steering/structure.md`;
+- contrato em `.kiro/steering/contract.md`;
+- spec da feature;
+- testes e scripts disponíveis no `package.json`.
 
-## Minimal Workflow
-- Phase 0 (optional): `/kiro-steering`, `/kiro-steering-custom`
-- Discovery: `/kiro-discovery "idea"` — determines action path, writes brief.md + roadmap.md for multi-spec projects
-- Phase 1 (Specification):
-  - Single spec: `/kiro-spec-quick {feature} [--auto]` or step by step:
-    - `/kiro-spec-init "description"`
-    - `/kiro-spec-requirements {feature}`
-    - `/kiro-validate-gap {feature}` (optional: for existing codebase)
-    - `/kiro-spec-design {feature} [-y]`
-    - `/kiro-validate-design {feature}` (optional: design review)
-    - `/kiro-spec-tasks {feature} [-y]`
-  - Multi-spec: `/kiro-spec-batch` — creates all specs from roadmap.md in parallel by dependency wave
-- Phase 2 (Implementation): `/kiro-impl {feature} [tasks]`
-  - Without task numbers: autonomous mode (subagent per task + independent review + final validation)
-  - With task numbers: manual mode (selected tasks in main context, still reviewer-gated before completion)
-  - `/kiro-validate-impl {feature}` (standalone re-validation)
-- Progress check: `/kiro-spec-status {feature}` (use anytime)
+Documentação nova do workflow deve ficar em `.kiro`, e Markdown de specs deve seguir o idioma definido no `spec.json`.
 
-## Skills Structure
-Skills are located in `.gemini/skills/kiro-*/SKILL.md`
-- Each skill is a directory with a `SKILL.md` file
-- Use `/skills` to inspect currently available skills
-- Invoke a skill directly with `/kiro-<skill-name>`
-- **If there is even a 1% chance a skill applies to the current task, invoke it.** Do not skip skills because the task seems simple.
-- `kiro-review` — task-local adversarial review protocol used by reviewer subagents
-- `kiro-debug` — root-cause-first debug protocol used by debugger subagents
-- `kiro-verify-completion` — fresh-evidence gate before success or completion claims
+## Atalho do workflow
 
-## Multi-Agent
-Gemini CLI supports agent-as-tool for sub-agent dispatch. Skills with "Parallel Research" sections list independent work items that benefit from sub-agent spawning.
-
-## Development Rules
-- 3-phase approval workflow: Requirements → Design → Tasks → Implementation
-- Human review required each phase; use `-y` only for intentional fast-track
-- Keep steering current and verify alignment with `/kiro-spec-status`
-- Follow the user's instructions precisely, and within that scope act autonomously: gather the necessary context and complete the requested work end-to-end in this run, asking questions only when essential information is missing or the instructions are critically ambiguous.
-
-## Steering Configuration
-- Load entire `.kiro/steering/` as project memory
-- Default files: `product.md`, `tech.md`, `structure.md`
-- Custom files are supported (managed via `/kiro-steering-custom`)
+Para uma ideia nova, use `/kiro-discovery`. Para uma feature já delimitada, use `/kiro-spec-init`, depois `/kiro-spec-requirements`, `/kiro-spec-design`, `/kiro-spec-tasks` e `/kiro-impl`. Consulte o andamento com `/kiro-spec-status` e valide com `/kiro-validate-impl`.

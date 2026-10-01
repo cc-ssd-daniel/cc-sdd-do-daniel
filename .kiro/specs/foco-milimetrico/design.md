@@ -36,7 +36,7 @@
 ### Allowed Dependencies
 - Contrato comum dos minigames (assinaturas `start/complete/fail/reset/dispose`).
 - `services` fornecidos em `start`: `patience`, `audio`, `storage` (usados atrás de fake adapters até a integração).
-- React 19 (Create React App) — camada de UI.
+- React 19 (Vite) — camada de UI.
 
 ### Revalidation Triggers
 - Mudança na forma do contrato comum ou no payload de `result`.
@@ -70,8 +70,8 @@ graph LR
 
 | Layer | Choice / Version | Role in Feature | Notes |
 |-------|------------------|-----------------|-------|
-| Frontend / UI | React 19.3 (CRA) | Renderização do minigame e captura de entrada | Sem TypeScript; JS + JSDoc |
-| Runtime | Node.js (react-scripts) | Build e testes | Sem ejeção |
+| Frontend / UI | React 19.3 (Vite) | Renderização do minigame e captura de entrada | JSX integrado ao shell TypeScript |
+| Runtime | Node.js (Vite) | Build e execução | `npm run dev` e `npm run build` |
 | Data / Storage | Adapter injetado (`services.storage`) | Melhor pontuação e config persistida | Fake nos testes |
 | Messaging / Events | `services.patience.applyDelta` | Emissão de deltas de paciência | Contrato comum |
 
@@ -82,15 +82,17 @@ graph LR
 src/
 ├── minigames/
 │   └── foco/
-│       ├── focoConfig.js       # Defaults e validação de config (Requirement 6)
-│       ├── focoEngine.js       # Regra pura do minigame (Requirements 2,3,4)
-│       ├── useFocoEngine.js    # Hook React que roda o engine no tempo (loop/timer)
-│       ├── FocoMilimetrico.js  # Componente de apresentação + entrada (Requirements 2,5,7)
-│       ├── FocoMilimetrico.css # Estilos e estados visuais (Requirement 5,7)
-│       └── focoContract.js     # Adapter start/complete/fail/reset/dispose (Requirement 1)
+│       ├── foco.tsx            # Adapter público usado pelo CoreLoop
+│       └── react-apps/foco/
+│           ├── focoConfig.jsx  # Defaults e validação de config
+│           ├── focoEngine.jsx  # Regra do minigame
+│           ├── useFocoEngine.jsx
+│           ├── FocoMilimetrico.jsx
+│           ├── FocoMilimetrico.css
+│           └── focoContract.jsx
 └── minigames/
     └── fakes/
-        └── fakeServices.js     # patience/audio/storage fake para harness e testes
+        └── fakeServices.jsx    # patience/audio/storage fake para harness e testes
 ```
 
 > `minigames/fakes/fakeServices.js` existe para permitir execução e teste isolados antes dos adapters reais (não é código de produção final).

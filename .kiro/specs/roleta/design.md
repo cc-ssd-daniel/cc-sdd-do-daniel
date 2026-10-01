@@ -1,7 +1,7 @@
 # Design — ROL-03
 
 ## Boundary Commitments
-O pacote possui somente `.kiro/specs/roleta`, `src/minigames/roleta` e `tests/roleta` dentro da aplicação. Specs seguem a convenção `.kiro/specs` existente. IA-04 pode editar somente `.kiro/steering/tech.md`; persistência tem spec e testes próprios dentro de `src/storage`.
+O pacote possui `.kiro/specs/roleta`, `src/minigames/roleta` e os componentes React relacionados em `src/minigames/react-apps/roleta`. Specs seguem a convenção `.kiro/specs`. A integração com o core é feita pelo wrapper TypeScript; persistência não faz parte da implementação atual.
 
 Out of Boundary: lógica e registro dos jogos existentes, App, controller comum, estado global e integração INT-01 de Vitor.
 
@@ -24,14 +24,13 @@ graph LR
 ## File Structure Plan
 | Caminho na aplicação | Responsabilidade |
 |---|---|
-| src/minigames/roleta/roulette.js | Configuração validada, seleção, timers, estado e ciclo de vida |
-| src/minigames/roleta/contractAdapter.js | Tradução para eventos locais e callbacks do backlog |
-| src/minigames/roleta/InputRoulette.js | Controles React e feedback acessível |
-| src/minigames/roleta/RouletteHarness.js | Montagem isolada com fixture |
-| src/minigames/roleta/fixtures.js | Paciência fake e configuração reproduzível |
-| src/minigames/roleta/index.js | Exports públicos |
-| src/minigames/roleta/harnessEntry.js | Entrada de build isolado |
-| tests/roleta/* | Testes de motor, contrato, interface, configuração Jest e build do harness |
+| src/minigames/react-apps/roleta/roulette.jsx | Configuração validada, seleção, timers, estado e ciclo de vida |
+| src/minigames/react-apps/roleta/contractAdapter.jsx | Tradução para eventos locais e callbacks |
+| src/minigames/react-apps/roleta/InputRoulette.jsx | Controles React e feedback acessível |
+| src/minigames/react-apps/roleta/RouletteHarness.jsx | Montagem isolada com fixture |
+| src/minigames/react-apps/roleta/fixtures.jsx | Paciência fake e configuração reproduzível |
+| src/minigames/react-apps/roleta/index.jsx | Exports públicos |
+| src/minigames/react-apps/roleta/harnessEntry.jsx | Entrada do harness |
 
 ## Interfaces e dados
 `createRoulette({ now, setTimer, clearTimer }?)` fornece `start(config, services)`, `select()`, `complete(result)`, `fail(reason)`, `reset()`, `dispose()`, `snapshot()` e `subscribe(listener)`.

@@ -19,4 +19,4 @@ Autorização: pedido explícito de implementar todo o pacote. Ordem sequencial;
   - _Requirements: 1.1, 1.2, 1.3, 2.1, 2.2, 2.3, 3.1, 3.2, 3.3, 4.1, 4.2, 4.3_
   - _Boundary: testes e evidências Roleta_
 
-PER-01/PER-02 têm especificação e checklist em `src/storage/SPEC.md`; IA-04 em `.kiro/steering/tech.md`. Gestão consolidada em `evidence.md` deste pacote.
+As tarefas de persistência não fazem parte da implementação atual da Roleta. O steering técnico canônico está em `.kiro/steering/tech.md`; a gestão da Roleta está consolidada em `evidence.md`.

@@ -1,9 +1,9 @@
 # Plano de Tasks
 
 ## Fase 1: Centralização e Preparação
-- [x] 1. Mover documentação e anotações soltas (se houver) do diretório `vibe-code-do-daniel` para os respectivos diretórios de specs em `.kiro/specs/`.
-- [x] 2. Analisar quais partes exclusivas de lógica de `vibe-code-do-daniel` (React) faltam ser transportadas para os arquivos `.ts` do projeto Vanilla (`fake.ts`, `foco.ts`, etc.).
-- [x] 3. Copiar todos os assets de CSS/Imagens que faltam de `vibe-code-do-daniel` para `cc-sdd-do-daniel/src/assets` ou `public`.
+- [x] 1. Centralizar documentação e anotações nos respectivos diretórios de specs em `.kiro/specs/`.
+- [x] 2. Analisar quais partes dos componentes React precisavam ser adaptadas para os wrappers TypeScript do projeto Vite.
+- [x] 3. Copiar os assets necessários para `src/assets` ou `public`.
 
 ## Fase 2: Implementação da Interface Contratual dos Minigames
 - [x] 4. Atualizar o `core/contract.ts` (ou criar um se não existir) para definir uma interface forte de montagem/desmontagem de minigames (ex: `mount(container, onComplete)`).
@@ -18,5 +18,5 @@
 - [x] 11. Implementar a lógica de limpeza (`unmount`) quando um minigame emite `onComplete`, limpando o DOM e lançando o próximo.
 
 ## Fase 4: Limpeza (Sunset do projeto antigo)
-- [x] 12. Após confirmar que a execução sequencial funciona com todos os estilos migrados, excluir permanentemente a pasta `vibe-code-do-daniel`.
-- [x] 13. Validar se não há menções residuais ou lixos de cache relacionados ao projeto antigo (ex: scripts no package.json).
+- [x] 12. Confirmar a execução sequencial com os estilos migrados e manter somente a base Vite atual.
+- [x] 13. Validar se não há menções residuais ou scripts do projeto anterior no `package.json`.

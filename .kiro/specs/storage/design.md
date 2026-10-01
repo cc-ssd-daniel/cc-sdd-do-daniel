@@ -16,7 +16,7 @@ Responsável: Cadu. Spec completa do adapter de configurações e progresso. Có
 - 3.3 When dados são retornados, the adapter shall fornecer cópias independentes para evitar mutações externas do estado.
 
 ## Design e schema
-Boundary: `src/storage`. Out of Boundary: migração de consumidores preexistentes, telas, regras de pontuação dos jogos e estado global. Allowed Dependencies: schema próprio, API Storage nativa injetada. Revalidation Triggers: alteração de chaves, schema, versão ou defaults requer testes de recuperação e round trip.
+Status: especificação planejada; não há implementação de storage em `src/` nesta base. Boundary futuro: `src/storage`. Out of Boundary: telas, regras de pontuação dos jogos e estado global. Allowed Dependencies: schema próprio e API Storage nativa injetada. A implementação deve ganhar `requirements.md`, `spec.json` e `tasks.md` antes de começar.
 
 Chaves exclusivas: `projetor-simulator:settings` e `projetor-simulator:progress`. Ambas guardam `{version: 1, data: ...}` em JSON. Não usar clear(), nem apagar chaves de outros aplicativos. Versão desconhecida resulta em padrões de leitura; gravação explícita substitui apenas a chave correspondente pela versão 1. Não há formatos anteriores versionados neste repo, portanto não há migração presumida.
 

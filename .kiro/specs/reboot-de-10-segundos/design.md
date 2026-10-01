@@ -28,7 +28,7 @@ The Reboot mini-game is a compact browser challenge designed for the projector s
 
 ### Allowed Dependencies
 - React component state and CSS for UI.
-- Shared project config from Create React App and browser APIs only.
+- Vite, TypeScript/JSX e APIs do navegador já presentes no projeto.
 
 ### Revalidation Triggers
 - A change to how minigame outcomes are reported.
@@ -54,28 +54,28 @@ flowchart TD
 | Frontend | React 19 | Component rendering | Browser-based interactive UI |
 | UI | CSS / DOM state | Visual timing ritual and feedback | Keeps challenge lightweight |
 | State | React state | One mini-game lifecycle | No external store required |
-| Runtime | Browser / CRA | Execution environment | Fits existing project setup |
+| Runtime | Browser / Vite | Execution environment | Fits existing project setup |
 
 ## File Structure Plan
-The feature will reside in a dedicated folder for the mini-game and share the common pattern used by the project’s flat React file structure.
+The feature is split between the public wrapper used by the core and the React component used by the interaction.
 
 ```text
 src/
 ├── minigames/
 │   └── reboot/
-│       ├── RebootGame.js
-│       ├── RebootGame.css
-│       └── rebootConfig.js
-├── App.js
-└── App.css
+│       └── reboot.tsx
+├── minigames/react-apps/reboot/
+│   ├── RebootGame.jsx
+│   ├── RebootGame.css
+│   └── rebootConfig.jsx
+└── core/loop.ts
 ```
 
 ### Modified Files
-- `src/App.js` — mount a test version of the mini-game and later connect the parent flow.
-- `src/App.css` — add supporting layout styles for the challenge area.
-- `src/minigames/reboot/RebootGame.js` — implement core logic and UI.
-- `src/minigames/reboot/RebootGame.css` — style the power button, timing track, and visual warnings.
-- `src/minigames/reboot/rebootConfig.js` — share constants for window timing and difficulty adjustments.
+- `src/minigames/reboot/reboot.tsx` — adapt the React component to the public core contract.
+- `src/minigames/react-apps/reboot/RebootGame.jsx` — implement the challenge logic and UI.
+- `src/minigames/react-apps/reboot/RebootGame.css` — style the power button, timing track, and visual warnings.
+- `src/minigames/react-apps/reboot/rebootConfig.jsx` — share constants for window timing and difficulty adjustments.
 
 ## System Flows
 ```mermaid
