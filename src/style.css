@@ -38,9 +38,9 @@
 body {
   margin: 0;
   background:
-    radial-gradient(ellipse at 12% 8%, rgba(110, 168, 230, 0.22), transparent 34rem),
-    radial-gradient(ellipse at 88% 78%, rgba(132, 119, 210, 0.14), transparent 38rem),
-    linear-gradient(145deg, #e8eff8 0%, #f3f5fa 48%, #e7edf5 100%);
+    radial-gradient(ellipse at 12% 8%, rgba(65, 126, 196, 0.34), transparent 36rem),
+    radial-gradient(ellipse at 88% 78%, rgba(105, 87, 178, 0.26), transparent 40rem),
+    linear-gradient(145deg, #cbd8e8 0%, #dce3ed 46%, #c6d3e3 100%);
   background-attachment: fixed;
 }
 
