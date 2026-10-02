@@ -17,3 +17,7 @@
   - Injetar cutscenes entre as chamadas dos minigames.
   - Atualizar HUD e estilos para acomodar o modo primeira pessoa.
 
+- [x] 6. Corrigir ciclo de vida da cutscene e da paciência
+  - Reanexar a camada da cutscene após o CoreLoop recriar o DOM da tela.
+  - Iniciar/parar o decaimento de paciência conforme os estados ROOM/REPAIR e os estados finais.
+  - Validar a compilação de produção com Vite.

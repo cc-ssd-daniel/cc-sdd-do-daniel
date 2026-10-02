@@ -45,6 +45,13 @@ export class CoreLoop {
             this.currentMinigame = undefined;
         }
         this.currentState = newState;
+
+        if (newState === 'ROOM' || newState === 'REPAIR') {
+            this.patienceMeter.startDecay();
+        } else {
+            this.patienceMeter.stopDecay();
+        }
+
         this.render();
     }
 

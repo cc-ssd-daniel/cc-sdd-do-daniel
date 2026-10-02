@@ -36,8 +36,13 @@ export class CutsceneManager {
     }
 
     public play(dialogues: DialogueLine[], onComplete: () => void) {
+        if (this.cutsceneLayer.parentElement !== this.container) {
+            this.container.appendChild(this.cutsceneLayer);
+        }
+
         this.dialogues = dialogues;
         this.currentLine = 0;
+        this.isTyping = false;
         this.onCompleteCallback = onComplete;
         this.cutsceneLayer.style.display = 'flex';
         this.cutsceneLayer.style.opacity = '1';
