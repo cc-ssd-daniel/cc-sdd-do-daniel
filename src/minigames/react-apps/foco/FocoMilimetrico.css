@@ -14,6 +14,8 @@
   font-size: 1.5rem;
   font-weight: 600;
   letter-spacing: -0.4px;
+  color: #123f68;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
 }
 
 .foco__status {
