@@ -1,0 +1,72 @@
+.input-roulette {
+  display: grid;
+  gap: 12px;
+  width: 100%;
+  padding: 24px;
+  color: #f4f7fb;
+  background: linear-gradient(145deg, #202b3a, #151c27);
+  border: 1px solid #3b4a5e;
+  border-radius: 16px;
+  box-shadow: 0 16px 36px rgba(12, 22, 36, 0.22);
+  text-align: left;
+}
+
+.input-roulette h1,
+.input-roulette p {
+  margin: 0;
+}
+
+.input-roulette h1 {
+  color: #ffffff;
+  font-size: 1.5rem;
+}
+
+.input-roulette p {
+  color: #d4deea;
+}
+
+.input-roulette strong {
+  color: #7dd3fc;
+}
+
+.input-roulette [role="status"] {
+  min-height: 1.5em;
+  color: #b9e8ff;
+  font-weight: 600;
+}
+
+.input-roulette button {
+  justify-self: start;
+  padding: 10px 16px;
+  color: #f8fbff;
+  background: #334155;
+  border: 1px solid #61738a;
+  border-radius: 999px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.input-roulette button:first-of-type {
+  background: #0877c9;
+  border-color: #48b5f5;
+}
+
+.input-roulette button:hover:not(:disabled) {
+  filter: brightness(1.12);
+}
+
+.input-roulette button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.input-roulette button:focus-visible {
+  outline: 3px solid #f8cc67;
+  outline-offset: 3px;
+}
+
+@media (max-width: 560px) {
+  .input-roulette {
+    padding: 18px;
+  }
+}
