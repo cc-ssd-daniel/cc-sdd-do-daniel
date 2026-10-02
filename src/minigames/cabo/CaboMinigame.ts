@@ -30,20 +30,21 @@ export class CaboMinigame implements MinigameContract {
 
     private render() {
         this.container.innerHTML = `
-            <div id="cabo-game" style="position:relative; width:100%; height:400px; background: radial-gradient(circle at center, #3a3a3a 0%, #111 100%); overflow:hidden; cursor:crosshair; border-radius: 8px;">
+            <div style="padding: 12px 16px; color: #fff; background: #19191b; border-radius: 8px 8px 0 0;">
+                <div style="font-weight: 700;">OBJETIVO: Clique na peça azul do projetor.</div>
+                <div id="cabo-status" role="status" aria-live="polite" style="font-size: 0.9rem; margin-top: 4px;">
+                    Aguarde o flash terminar. Mova o mouse somente quando a luz estiver apagada.
+                </div>
+                <div style="width:150px; height:10px; background:#333; border:1px solid #777; margin-top:8px;">
+                    <div id="hp-fill" style="width:100%; height:100%; background:#00ffcc; transition:width 0.2s;"></div>
+                </div>
+            </div>
+            <div id="cabo-game" style="position:relative; width:100%; height:400px; background: radial-gradient(circle at center, #3a3a3a 0%, #111 100%); overflow:hidden; cursor:crosshair; border-radius: 0 0 8px 8px;">
                 <div id="flash-overlay" style="position:absolute; top:0; left:0; width:100%; height:100%; background-color: rgba(255,255,255,0); pointer-events:none; z-index:30; transition: background-color 0.1s;"></div>
                 
-                <div style="position:absolute; top:10px; left:10px; color:white; z-index:15;">
-                    <div>OBJETIVO: Plugue o cabo VGA na porta azul.</div>
-                    <div style="font-size: 0.8rem; color: #ff3366; margin-top:5px;">CUIDADO: Não mova o mouse durante o Flash!</div>
-                    <div style="width:150px; height:10px; background:#333; border:1px solid white; margin-top:5px;">
-                        <div id="hp-fill" style="width:100%; height:100%; background:#00ffcc; transition:width 0.2s;"></div>
-                    </div>
-                </div>
-
                 <div id="projector" style="position:absolute; top:20px; left:50%; transform:translateX(-50%); width:120px; height:60px; background:#ccc; border-radius:10px; border-bottom:5px solid #888; display:flex; justify-content:center; align-items:flex-end;">
                     <div id="projector-lens" style="width:30px; height:30px; background:#111; border-radius:50%; margin-bottom:10px; border:3px solid #555;"></div>
-                    <div id="vga-port" style="position:absolute; top:40px; left:20%; width:25px; height:12px; background:#0033cc; border:2px solid #000; cursor:pointer; z-index:20;"></div>
+                    <button id="vga-port" type="button" aria-label="Conectar o cabo VGA" title="Clique aqui quando o flash parar" style="position:absolute; top:40px; left:17%; width:42px; height:24px; padding:0; background:#064de0; border:3px solid #001b66; border-radius:3px; cursor:pointer; z-index:20; box-shadow:0 0 8px rgba(41,151,255,.85);"></button>
                 </div>
 
                 <div id="player-arm" style="position:absolute; bottom:-50px; left:50%; width:80px; height:300px; background:linear-gradient(to right, #c18f76, #9c6c56); border-radius:40px 40px 0 0; pointer-events:none; z-index:15; display:flex; justify-content:center;">
@@ -58,13 +59,15 @@ export class CaboMinigame implements MinigameContract {
             projectorLens: this.container.querySelector('#projector-lens'),
             vgaPort: this.container.querySelector('#vga-port'),
             arm: this.container.querySelector('#player-arm'),
-            hpFill: this.container.querySelector('#hp-fill')
+            hpFill: this.container.querySelector('#hp-fill'),
+            status: this.container.querySelector('#cabo-status')
         };
 
         this.domElements.vgaPort.addEventListener('click', (e: MouseEvent) => {
             e.stopPropagation();
             if(!this.gameActive) return;
             if (this.isFlashing) {
+                this.updateStatus('Você clicou durante o flash! Espere a luz apagar.', '#ff8a8a');
                 this.takeDamage();
             } else {
                 this.win();
@@ -105,6 +108,7 @@ export class CaboMinigame implements MinigameContract {
     private triggerFlash() {
         if (!this.gameActive) return;
         this.isFlashing = true;
+        this.updateStatus('FLASH! Fique parado e não clique.', '#ff8a8a');
         
         this.domElements.projectorLens.style.background = '#fff';
         this.domElements.projectorLens.style.boxShadow = '0 0 50px 20px #fff';
@@ -118,9 +122,17 @@ export class CaboMinigame implements MinigameContract {
                 this.domElements.projectorLens.style.background = '#111';
                 this.domElements.projectorLens.style.boxShadow = 'none';
                 this.domElements.flashOverlay.style.backgroundColor = 'rgba(255, 255, 255, 0)';
+                this.updateStatus('Luz apagada! Clique na peça azul do projetor agora.', '#8fffe0');
             }
             this.startFlashCycle();
         }, flashDuration);
+    }
+
+    private updateStatus(message: string, color: string) {
+        if (this.domElements.status) {
+            this.domElements.status.textContent = message;
+            this.domElements.status.style.color = color;
+        }
     }
 
     private takeDamage() {
