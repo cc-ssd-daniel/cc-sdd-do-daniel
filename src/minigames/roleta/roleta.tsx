@@ -1,4 +1,3 @@
-import React from 'react';
 import { createRoot } from 'react-dom/client';
 import type { Root } from 'react-dom/client';
 import type { MinigameContract, MinigameResult } from '../../core/contract';
@@ -23,7 +22,7 @@ export class RoletaMinigame implements MinigameContract {
             complete: (result: any) => {
                 this.successCb?.({ success: true, score: result.score || 100 });
             },
-            fail: (reason: string) => {
+            fail: () => {
                 this.failureCb?.({ success: false, score: 0 });
             },
             audio: {
@@ -31,7 +30,7 @@ export class RoletaMinigame implements MinigameContract {
             }
         };
 
-        const handleEvent = (event: any) => {
+        const handleEvent = (event: { type: string; payload?: { delta?: number } }) => {
             if (event.type === 'game:delta-patience') {
                 window.dispatchEvent(new CustomEvent('game:delta-patience', { detail: { delta: event.payload?.delta || -5 } }));
             }

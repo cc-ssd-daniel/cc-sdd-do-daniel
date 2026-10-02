@@ -1,4 +1,3 @@
-import React from 'react';
 import { createRoot } from 'react-dom/client';
 import type { Root } from 'react-dom/client';
 import type { MinigameContract, MinigameResult } from '../../core/contract';
@@ -40,8 +39,8 @@ export class FocoMinigame implements MinigameContract {
             <FocoMilimetrico 
                 config={DEFAULT_CONFIG} 
                 services={realServices}
-                onComplete={(res: any) => this.successCb?.({ success: true, score: 100 })}
-                onFail={(reason: string) => this.failureCb?.({ success: false, score: 0 })}
+                onComplete={() => this.successCb?.({ success: true, score: 100 })}
+                onFail={() => this.failureCb?.({ success: false, score: 0 })}
             />
         );
     }
