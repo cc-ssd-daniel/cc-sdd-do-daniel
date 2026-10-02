@@ -1,4 +1,4 @@
-import type { MinigameContract, MinigameResult } from '../core/contract';
+import type { MinigameContract, MinigameResult } from '../../core/contract';
 
 export class FakeMinigame implements MinigameContract {
     private successCb?: (result: MinigameResult) => void;
