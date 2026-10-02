@@ -44,7 +44,7 @@ export class CaboMinigame implements MinigameContract {
                 
                 <div id="projector" style="position:absolute; top:20px; left:50%; transform:translateX(-50%); width:120px; height:60px; background:#ccc; border-radius:10px; border-bottom:5px solid #888; display:flex; justify-content:center; align-items:flex-end;">
                     <div id="projector-lens" style="width:30px; height:30px; background:#111; border-radius:50%; margin-bottom:10px; border:3px solid #555;"></div>
-                    <button id="vga-port" type="button" aria-label="Conectar o cabo VGA" title="Clique aqui quando o flash parar" style="position:absolute; top:40px; left:17%; width:42px; height:24px; padding:0; background:#064de0; border:3px solid #001b66; border-radius:3px; cursor:pointer; z-index:20; box-shadow:0 0 8px rgba(41,151,255,.85);"></button>
+                    <button id="vga-port" type="button" aria-label="Conectar o cabo VGA" title="Clique aqui quando o flash parar" style="position:absolute; top:40px; left:20%; width:25px; height:12px; padding:0; background:#0033cc; border:2px solid #000; cursor:pointer; z-index:20;"></button>
                 </div>
 
                 <div id="player-arm" style="position:absolute; bottom:-50px; left:50%; width:80px; height:300px; background:linear-gradient(to right, #c18f76, #9c6c56); border-radius:40px 40px 0 0; pointer-events:none; z-index:15; display:flex; justify-content:center;">
