@@ -7,8 +7,8 @@
   --blue-on-dark: #2997ff;
   --ink: #1d1d1f;
   --muted: #7a7a7a;
-  --canvas: #ffffff;
-  --parchment: #f5f5f7;
+  --canvas: #edf2f8;
+  --parchment: #e5ebf3;
   --tile-dark: #272729;
   --on-dark: #ffffff;
   --hairline: #e0e0e0;
@@ -27,7 +27,7 @@
 
   font: 17px/1.47 var(--sans);
   color: var(--ink);
-  background: var(--canvas);
+  background: transparent;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -35,7 +35,14 @@
 
 * { box-sizing: border-box; }
 
-body { margin: 0; background: var(--canvas); }
+body {
+  margin: 0;
+  background:
+    radial-gradient(ellipse at 12% 8%, rgba(65, 126, 196, 0.34), transparent 36rem),
+    radial-gradient(ellipse at 88% 78%, rgba(105, 87, 178, 0.26), transparent 40rem),
+    linear-gradient(145deg, #cbd8e8 0%, #dce3ed 46%, #c6d3e3 100%);
+  background-attachment: fixed;
+}
 
 #app {
   min-height: 100svh;
@@ -113,8 +120,8 @@ body { margin: 0; background: var(--canvas); }
   gap: 20px;
   padding: 80px 24px;
 }
-.screen--hero { background: var(--canvas); }
-.screen--repair { background: var(--parchment); }
+.screen--hero { background: transparent; }
+.screen--repair { background: transparent; }
 
 .eyebrow {
   margin: 0;
@@ -192,7 +199,7 @@ body { margin: 0; background: var(--canvas); }
   min-height: 340px;
   margin: 8px auto 0;
   padding: 28px;
-  background: var(--canvas);
+  background: rgba(255, 255, 255, 0.38);
   border: 1px solid var(--hairline);
   border-radius: var(--r-card);
 }
@@ -304,4 +311,3 @@ body { margin: 0; background: var(--canvas); }
   animation: blink 1s infinite;
 }
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-

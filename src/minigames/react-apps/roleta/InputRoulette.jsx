@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { createRoulette } from './roulette';
+import './InputRoulette.css';
 
 export default function InputRoulette({ config = {}, accessibility = {}, onEvent, services = {} }) {
   const game = useMemo(() => createRoulette(), []);
@@ -26,7 +27,7 @@ export default function InputRoulette({ config = {}, accessibility = {}, onEvent
 
   const restart = () => { game.reset(); game.start(JSON.parse(configKey), stableServices); };
   return (
-    <section aria-label="Roleta do Input">
+    <section className="input-roulette" aria-label="Roleta do Input">
       <h1>Roleta do Input</h1>
       <p>Entrada correta: <strong>{state.target}</strong>. Selecione quando esse nome aparecer.</p>
       <p>Cada erro acelera a troca e reduz a paciência. Use Tab para navegar e Enter ou Espaço para selecionar.</p>

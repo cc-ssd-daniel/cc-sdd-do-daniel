@@ -45,6 +45,13 @@ export class CoreLoop {
             this.currentMinigame = undefined;
         }
         this.currentState = newState;
+
+        if (newState === 'ROOM' || newState === 'REPAIR') {
+            this.patienceMeter.startDecay();
+        } else {
+            this.patienceMeter.stopDecay();
+        }
+
         this.render();
     }
 
@@ -151,9 +158,9 @@ export class CoreLoop {
             {
                 GameClass: CaboMinigame,
                 cutscene: [
-                    { speaker: "Prof. Carlos", text: "Graças a Deus a TI chegou! Os alunos estão me engolindo vivo..." },
-                    { speaker: "Prof. Carlos", text: "O cabo VGA desconectou do teto de novo. Mas tem um problema pior..." },
-                    { speaker: "Prof. Carlos", text: "A lâmpada quebrou a trava de segurança. Ela tá disparando um flash de 5.000 lúmens que cega qualquer um!" },
+                    { speaker: "Prof. Daniel", text: "Graças a Deus a TI chegou! Os alunos estão me engolindo vivo..." },
+                    { speaker: "Prof. Daniel", text: "O cabo VGA desconectou do teto de novo. Mas tem um problema pior..." },
+                    { speaker: "Prof. Daniel", text: "A lâmpada quebrou a trava de segurança. Ela tá disparando um flash de 5.000 lúmens que cega qualquer um!" },
                     { speaker: "Você (TI)", text: "...Deixa comigo. Vou no escuro.", color: "#ff3366" }
                 ]
             },
@@ -161,16 +168,16 @@ export class CoreLoop {
                 GameClass: FocoMinigame,
                 cutscene: [
                     { speaker: "Aluno no Fundo", text: "Ih, a imagem tá toda borrada! Não dá pra ler nada!" },
-                    { speaker: "Prof. Carlos", text: "TI, ajusta o foco milimétrico! Rápido, eles estão perdendo a paciência!" },
+                    { speaker: "Prof. Daniel", text: "TI, ajusta o foco milimétrico! Rápido, eles estão perdendo a paciência!" },
                     { speaker: "Você (TI)", text: "Essas lentes velhas são impossíveis de girar. Lá vou eu...", color: "#ff3366" }
                 ]
             },
             {
                 GameClass: EquilibrioMinigame,
                 cutscene: [
-                    { speaker: "Prof. Carlos", text: "O projetor desalinhou, você vai ter que subir ali." },
+                    { speaker: "Prof. Daniel", text: "O projetor desalinhou, você vai ter que subir ali." },
                     { speaker: "Você (TI)", text: "Não tem escada?", color: "#ff3366" },
-                    { speaker: "Prof. Carlos", text: "Use aquela cadeira de rodinhas quebrada. Só tenta não cair, por favor." }
+                    { speaker: "Prof. Daniel", text: "Use aquela cadeira de rodinhas quebrada. Só tenta não cair, por favor." }
                 ]
             },
             {
@@ -185,14 +192,14 @@ export class CoreLoop {
                 GameClass: RoletaMinigame,
                 cutscene: [
                     { speaker: "Você (TI)", text: "Falta só configurar a entrada. Vamos ver em qual canal o PC tá conectado...", color: "#ff3366" },
-                    { speaker: "Prof. Carlos", text: "Cuidado! Esse modelo antigo é uma roleta russa. Se escolher a entrada errada, ele queima!" }
+                    { speaker: "Prof. Daniel", text: "Cuidado! Esse modelo antigo é uma roleta russa. Se escolher a entrada errada, ele queima!" }
                 ]
             },
             {
                 GameClass: SenhaMinigame,
                 cutscene: [
                     { speaker: "Projetor", text: "INSIRA A SENHA ADMINISTRATIVA PARA LIBERAR A PROJEÇÃO" },
-                    { speaker: "Prof. Carlos", text: "Nossa, eu esqueci a senha! Acho que era Pr0jetor@123!" },
+                    { speaker: "Prof. Daniel", text: "Nossa, eu esqueci a senha! Acho que era Pr0jetor@123!" },
                     { speaker: "Você (TI)", text: "Tenho poucos segundos para digitar antes do bloqueio de segurança...", color: "#ff3366" }
                 ]
             }
